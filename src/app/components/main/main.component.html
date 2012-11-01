@@ -62,8 +62,8 @@
                     <tbody *ngIf="ventas">
                         <tr *ngIf="ventas.length == 0">
                             <td colspan="4">
-                                <h5>No tienes ventas Activas <span class="badge badge-warning" (click)="goShop()">
-                                        vender </span></h5>
+                                <p>No has realizado ninguna Venta <span class="badge badge-warning cursor"
+                                        (click)="goShop()"> Vender </span></p>
                             </td>
                         </tr>
                         <tr *ngFor="let venta of ventas">
