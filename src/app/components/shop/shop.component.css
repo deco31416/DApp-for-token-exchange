@@ -1,0 +1,54 @@
+#imgLogo {
+    width: 70%;
+}
+
+#sectionCompra {
+    margin-top: 50px;
+}
+
+#sectionAdorno .imagen {
+    height: 150px;
+    background-image: url('/assets/bgheader.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+@media(max-width:650px) {
+    #sectionAdorno .imagen {
+        height: 70px;
+        background-image: url('/assets/bgheader.jpg');
+        background-size: 100% 650px;
+        background-position: center center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+#sectionVenta {
+    padding-top: 50px;
+}
+
+#footer {
+    position: fixed;
+    top: auto;
+    bottom: 10px;
+    left: auto;
+    right: 10px;
+}
+
+#listadoEnVenta {
+    text-align: center;
+    font-size: small;
+}
+
+@media(max-width:650) {
+    #imgLogo {
+        width: 100%;
+    }
+}
+
+.cursor{
+    cursor: pointer;
+}

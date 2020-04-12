@@ -1,0 +1,52 @@
+#estadoPrincipal{
+    background-image: url('/assets/bg-white1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+
+}
+
+#logoSvg{
+    right: 0;
+    left: auto;
+    width: 60%;   
+}
+
+@media (max-width: 650px) {
+    #logoSvg{
+        right: 0;
+        left: auto;
+        width: 100%;
+    }
+  }
+
+.btnSalir{
+    background-color: rgba(0, 0, 255, 0.476);
+    padding: 5px;
+    border-radius: 3px 3px 3px 3px;
+    color: whitesmoke;
+
+}
+
+.btnSalir:hover{
+    cursor: pointer;
+    color:rgb(54, 1, 1);
+    
+}
+
+#tokensOperationes{
+    margin-top: 100px;
+}
+
+#operaciones{
+    margin-bottom: 50px;
+}
+
+#footer{
+    position: fixed;
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: 10px;
+}

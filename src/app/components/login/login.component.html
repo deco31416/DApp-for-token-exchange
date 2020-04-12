@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-4 mt-4 mx-auto">
+        <div class="card m-2 animated animated fadeIn delay-2s">
+                <img src="/assets/logo.svg" class="imgLogin animated bounce delay-3s" alt="loginUser">
+            <div class="card-body">
+                <form #formLogin="ngForm" (submit)="loginUser(formLogin)">
+                    <div class="form-group">
+                        <label for="email"> <i class="fas fa-at"></i> Correo </label>
+                        <input [(ngModel)]="email" class="form-control form-control-sm inputLogin" type="email" name="email"
+                            placeholder="example@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"> <i class="fas fa-key"></i> Contraseña </label>
+                        <input [(ngModel)]="password" class="form-control form-control-sm inputLogin" type="password" name="password"
+                            placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-success">Acceder</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-footer">
+                <p><button class="btn btn-secondary btn-block" (click)="redirect()">¿No tienes cuenta aun? Registrate </button></p>
+            </div>
+        </div>
+    </div>
+</div>

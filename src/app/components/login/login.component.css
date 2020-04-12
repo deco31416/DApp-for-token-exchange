@@ -1,0 +1,14 @@
+.imgLogin{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card button{
+    font-size: smaller;
+}
+.card-footer{
+    font-size: small;
+}
+.form-group label{
+    font-size: small;
+}
