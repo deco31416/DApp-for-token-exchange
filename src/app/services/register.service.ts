@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore'; 
 import { AngularFireAuth } from '@angular/fire/auth';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,7 +28,12 @@ export class RegisterService {
         this.route.navigate(['/main']);
       }
     ).catch(error => {
-      alert('Este Correo ya esta Registrado')
+      Swal.fire({
+        title: "Disculpe",
+        text: 'El email o la contraseña no son validos para el registro',
+        icon: 'warning',
+        confirmButtonText: 'continuar'
+      })
     })
   }
 
