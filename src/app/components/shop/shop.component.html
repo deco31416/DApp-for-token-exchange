@@ -12,8 +12,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-10 mx-auto">
-            <table id="listadoEnVenta" class="table table-hover table-light table-striped">
+        <div class="col-md-10 mx-auto table-responsive">
+            <table id="listadoEnVenta" class="table table-sm table-hover table-light table-striped">
                 <thead>
                     <th>Fecha</th>
                     <th>Cantidad</th>
@@ -36,29 +36,150 @@
                         <td> {{oferta.data.precio|currency}}</td>
                         <td
                             *ngIf="oferta.data.tipo!=2 && oferta.data.status == 1 && currentUser.id != oferta.data.userId">
-                            <button (click)="mostrarSolicitud(oferta)" class="btn btn-warning animated flipInY delay-2s"
-                                data-toggle="modal" data-target="#loockPay"><i class="fas fa-hand-holding-usd"></i>
-                                Comprar </button></td>
+                            <span (click)="mostrarSolicitud(oferta)" class="badge badge-warning animated flipInY delay-2s"
+                                data-toggle="modal" data-target="#loockPay"><i class="fas fa-hand-holding-usd fa-2x"></i>
+                                Comprar </span></td>
                         <td
                             *ngIf="oferta.data.tipo!=2 && oferta.data.status == 2 && currentUser.id != oferta.data.userId">
                             Compra en Curso</td>
                         <td
                             *ngIf="oferta.data.tipo!=2 && oferta.data.status == 1 && currentUser.id == oferta.data.userId">
-                            Esta es tuya <span class="badge badge-primary">(Venta) <i
+                            <span class="badge badge-secondary animated flipInY delay-2s">(Yo) <i
                                     class="fas fa-hand-holding-usd fa-2x"></i></span></td>
 
                         <td *ngIf="oferta.data.tipo == 2 && currentUser.id != oferta.data.userId"
-                            (click)="mostrarOfertaCompra(oferta)" class="cursor" data-toggle="modal" data-target="#vender">Enviar
-                            Oferta de Venta <span class="badge badge-secondary"><i
+                            (click)="mostrarOfertaCompra(oferta)" class="cursor" data-toggle="modal"
+                            data-target="#vender"><span class="badge badge-primary animated flipInY delay-2s">Ofrecer Vender <i
                                     class="fas fa-hand-holding-usd fa-2x"></i></span>
                         </td>
-                        <td *ngIf="oferta.data.tipo == 2 && currentUser.id == oferta.data.userId">Esta es Tuya
-                            <span class="badge badge-secondary"> Quiero Comprar<i
+                        <td *ngIf="oferta.data.tipo == 2 && currentUser.id == oferta.data.userId"><span
+                                class="badge badge-secondary animated flipInY delay-2s">(Yo) <i
                                     class="fas fa-hand-holding-usd fa-2x"></i>
                             </span></td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</section>
+<section id="sectionVenta" class="animated fadeInLeft delay-2s">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4>Mis Operaciones de Venta</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <table id="listadoEnVenta" class="table table-hover table-light table-striped">
+                <thead>
+                    <th>Cantidad</th>
+                    <th>Precio/Unidad</th>
+                    <th>Estado</th>
+                </thead>
+                <tbody *ngIf="myTokenSale">
+                    <tr *ngIf="myTokenSale.length == 0">
+                        <td colspan="3">
+                            <p>No tienes Operaciones de venta</p>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let venta of myTokenSale">
+                        <td> {{venta.data.cantidad}} <i class="fas fa-coins"></i></td>
+                        <td> {{venta.data.precio|currency}}</td>
+                        <td *ngIf="venta.data.status == 1"> En espera</td>
+                        <td *ngIf="venta.data.status == 0"> Realizada</td>
+                        <td *ngIf="venta.data.status == 2"> <span
+                                class="badge badge-warning animated infinite bounce">Solicitud</span> Acuerda el pago en
+                            la pantalla principal</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center mt-5">
+            <h4> Lista de "Quiero comprar" </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <table id="listadoEnVenta" class="table table-hover table-light table-striped">
+                <thead>
+                    <th>Cantidad</th>
+                    <th>Estado</th>
+                </thead>
+                <tbody *ngIf="ofertaComprar">
+                    <tr *ngIf="myTokenSale.length == 0">
+                        <td colspan="2">
+                            <p>No has hecho ofertas de compra</p>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let oferta of ofertaComprar">
+                        <td>{{oferta.data.cantidad}} <i class="fas fa-coins"></i></td>
+                        <td>
+                            <p>Activa</p>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Realizar una Venta</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text font-smaller text-justify">Puedes Ofertar tus tokens, los interesados te
+                        enviaran una señal y tu podras acordar con ellos el metodo de pago, se notificara en la
+                        aplicacion principal cuando alguien te envie una señal</p>
+                    <form [formGroup]="formSaleToken" autocomplete="off">
+                        <span> Cantidad Disponible <strong *ngIf="currentUser"> {{currentUser.data.misTokens}}
+                                <i class="fas fa-coins"></i></strong></span>
+                        <div class="form-group">
+                            <input formControlName="cantidad" type="number" name="cantidad"
+                                placeholder="Ingresa una Cantidad" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <input formControlName="precio" type="number" name="precio"
+                                placeholder="Precio / Unidad (sin puntos ni comas)"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-info" type="button" (click)="realizarVenta()"> Realizar Venta <i
+                                    class="fas fa-tags fa-2x"></i> </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mx-auto">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Ofrecer una Compra</h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text font-smaller text-justify">Puedes crear una oferta de compra, para que los
+                        usarios vean tu interes en adquirir tokens, ingresa la cantidad que quieres comprar.
+                        apareceras en la seccion de ventas, los interesados se comunicaran contigo.</p>
+                    <form [formGroup]="formGenerarCompra" autocomplete="off" (submit)="realizarCompra()">
+                        <div class="form-group">
+                            <input type="number" name="cantidad" formControlName="cantidad"
+                                class="form-control form-control-sm" placeholder="Cantidad">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" formControlName="precio" placeholder="Precio / Unidad"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-info" type="button" (click)="ofertarCompra()"> Quiero Comprar <i
+                                    class="fas fa-coins fa-2x"></i> </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -132,133 +253,7 @@
         </div>
     </div>
 </section>
-<section id="sectionAdorno " class="animated fadeInLeft delay-2s">
-    <div class="row">
-        <div class="col-md-12 imagen">
 
-        </div>
-    </div>
-</section>
-<section id="sectionVenta" class="animated fadeInLeft delay-2s">
-    <div class="row">
-        <div class="col-md-10 mx-auto text-center">
-            <h4>Mis Operaciones de Venta</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 mx-auto">
-            <table id="listadoEnVenta" class="table table-hover table-light table-striped">
-                <thead>
-                    <th>Cantidad</th>
-                    <th>Precio/Unidad</th>
-                    <th>Estado</th>
-                </thead>
-                <tbody *ngIf="myTokenSale">
-                    <tr *ngIf="myTokenSale.length == 0">
-                        <td colspan="3">
-                            <p>No tienes Operaciones de venta</p>
-                        </td>
-                    </tr>
-                    <tr *ngFor="let venta of myTokenSale">
-                        <td> {{venta.data.cantidad}} <i class="fas fa-coins"></i></td>
-                        <td> {{venta.data.precio|currency}}</td>
-                        <td *ngIf="venta.data.status == 1"> En espera</td>
-                        <td *ngIf="venta.data.status == 0"> Realizada</td>
-                        <td *ngIf="venta.data.status == 2"> <span
-                                class="badge badge-warning animated infinite bounce">Solicitud</span> Acuerda el pago en
-                            la pantalla principal</td>
-
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 mx-auto text-center mt-5">
-            <h4> Lista de "Quiero comprar" </h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <table id="listadoEnVenta" class="table table-hover table-light table-striped">
-                <thead>
-                    <th>Cantidad</th>
-                    <th>Estado</th>
-                </thead>
-                <tbody *ngIf="ofertaComprar">
-                    <tr *ngIf="myTokenSale.length == 0">
-                        <td colspan="2">
-                            <p>No has hecho ofertas de compra</p>
-                        </td>
-                    </tr>
-                    <tr *ngFor="let oferta of ofertaComprar">
-                        <td>{{oferta.data.cantidad}} <i class="fas fa-coins"></i></td>
-                        <td>
-                            <p>Activa</p>
-                        </td>
-                    </tr>
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-5 mx-auto">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h4>Realizar una Venta</h4>
-                </div>
-                <div class="card-body">
-                    <p class="card-text font-smaller text-justify">Puedes Ofertar tus tokens, los interesados te
-                        enviaran una señal y tu podras acordar con ellos el metodo de pago, se notificara en la
-                        aplicacion principal cuando alguien te envie una señal</p>
-                    <form [formGroup]="formSaleToken" autocomplete="off" (submit)="realizarVenta()">
-                        <span> Cantidad Disponible <strong *ngIf="currentUser"> {{currentUser.data.misTokens}}
-                                <i class="fas fa-coins"></i></strong></span>
-                        <div class="form-group">
-                            <input formControlName="cantidad" type="number" name="cantidad"
-                                placeholder="Ingresa una Cantidad" class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group">
-                            <input formControlName="precio" type="number" name="precio"
-                                placeholder="Precio / Unidad (sin puntos ni comas)"
-                                class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group text-center">
-                            <button class="btn btn-info" type="button" (click)="realizarVenta()"> Realizar Venta <i
-                                    class="fas fa-tags fa-2x"></i> </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-5 mx-auto">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h4>Ofrecer una Compra</h4>
-                </div>
-                <div class="card-body">
-                    <p class="card-text font-smaller text-justify">Puedes crear una oferta de compra, para que los
-                        usarios vean tu interes en adquirir tokens, ingresa la cantidad que quieres comprar.
-                        apareceras en la seccion de ventas, los interesados se comunicaran contigo.</p>
-                    <form [formGroup]="formGenerarCompra" autocomplete="off" (submit)="realizarCompra()">
-                        <div class="form-group">
-                            <input type="number" name="cantidad" formControlName="cantidad"
-                                class="form-control form-control-sm" placeholder="Cantidad">
-                        </div>
-                        <div class="form-group">
-                            <input type="number" formControlName="precio" placeholder="Precio / Unidad"
-                                class="form-control form-control-sm">
-                        </div>
-                        <div class="form-group text-center">
-                            <button class="btn btn-info" type="button" (click)="ofertarCompra()"> Quiero Comprar <i class="fas fa-coins fa-2x"></i> </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <div id="footer">
     <button class="btn btn-success" (click)="goBack()"> Volver </button>
 </div>

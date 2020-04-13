@@ -165,7 +165,6 @@ export class ShopComponent implements OnInit {
             }
           }
         )
-        this.formGenerarCompra.reset();
       }
     )
   }
@@ -173,7 +172,7 @@ export class ShopComponent implements OnInit {
   //registra una venta
   realizarVenta() {
     if (this.formSaleToken.valid) {
-      if (typeof this.currentUser.id == 'string' && this.currentUser.data.misTokens >= Number.parseInt(this.formSaleToken.get('cantidad').value)) {
+      if (this.currentUser.data.misTokens >= this.formSaleToken.get('cantidad').value && this.formSaleToken.get('cantidad').value > 0 && this.formSaleToken.get('precio').value > 0 ) {
         this.service.tokenSale(this.currentUser.id, this.formSaleToken.value).then(
           resultado => {
             this.formSaleToken.reset();
@@ -183,13 +182,14 @@ export class ShopComponent implements OnInit {
               icon: 'success',
               confirmButtonText: 'continuar'
             })
+            this.formSaleToken.reset();
           }
         )
       }
       else {
         Swal.fire({
           title: "Disculpa",
-          text: 'Solo tienes ' + this.currentUser.data.misTokens + ' Tokens Disponibles',
+          text: 'Tienes ' + this.currentUser.data.misTokens + ' Tokens Disponibles, la cantidad y precio debe ser mayor que 0 ',
           icon: 'warning',
           confirmButtonText: 'Esta bien'
         })
@@ -216,20 +216,31 @@ export class ShopComponent implements OnInit {
     this.formBuyToken.get('ventaStatus').setValue(2);
     this.formBuyToken.get('email').setValue(this.currentUser.data.email);
     if (this.formBuyToken.valid) {
-      this.service.realizarCompra(this.formBuyToken.value);
-      Swal.fire({
-        title: "Genial",
-        text: 'Tu Solicitud de compra va en Camino',
-        icon: 'success',
-        confirmButtonText: 'Continuar'
-      })
+      if (this.formBuyToken.get('ventaPrecio').value > 0 && this.formBuyToken.get('ventaCantidad').value > 0) {
+        this.service.realizarCompra(this.formBuyToken.value);
+        Swal.fire({
+          title: "Genial",
+          text: 'Tu Solicitud de compra va en Camino',
+          icon: 'success',
+          confirmButtonText: 'Continuar'
+        })
+        this.formBuyToken.reset();
+      } else {
+        Swal.fire({
+          title: "Disculpa",
+          text: 'La cantidad y el precio debe ser mayor de 0',
+          icon: 'success',
+          confirmButtonText: 'Continuar'
+        })
+      }
     } else {
       Swal.fire({
         title: "Disculpa",
         text: 'Verifica los campos',
         icon: 'warning',
         confirmButtonText: 'Esta bien'
-      })    }
+      })
+    }
 
   }
 
@@ -238,20 +249,31 @@ export class ShopComponent implements OnInit {
   ofertarCompra() {
     this.formGenerarCompra.get('userEmail').setValue(this.currentUser.data.email);
     if (this.formGenerarCompra.valid) {
-      this.service.tokenOfertarCompra(this.currentUser.id, this.formGenerarCompra.value);
-      Swal.fire({
-        title: "Genial",
-        text: 'Tu oferta ya esta en la Seccion de Arriba',
-        icon: 'success',
-        confirmButtonText: 'Continuar'
-      })
+      if (this.formGenerarCompra.get('cantidad').value > 0 && this.formGenerarCompra.get('precio').value > 0) {
+        this.service.tokenOfertarCompra(this.currentUser.id, this.formGenerarCompra.value);
+        Swal.fire({
+          title: "Genial",
+          text: 'Tu oferta ya esta en la Seccion de Arriba',
+          icon: 'success',
+          confirmButtonText: 'Continuar'
+        })
+        this.formGenerarCompra.reset();
+      } else {
+        Swal.fire({
+          title: "Vaya",
+          text: 'Debes ingresar una cantidad y precio mayor de 0',
+          icon: 'warning',
+          confirmButtonText: 'Continuar'
+        })
+      }
     } else {
       Swal.fire({
         title: "Vaya Vaya",
-        text: 'Ingresa una cantidad y precio para poder Ofertar',
+        text: 'Ingresa una cantidad y precio mayor de 0',
         icon: 'warning',
         confirmButtonText: 'Esta bien'
-      })    }
+      })
+    }
   }
 
   mostrarOfertaCompra(data) {
@@ -261,7 +283,7 @@ export class ShopComponent implements OnInit {
   // Envia los tokens a una oferta de compra
   concretarVenta() {
     if (this.formSendToken.valid) {
-      if (this.currentUser.data.misTokens >= this.formSendToken.get('cantidad').value) {
+      if (this.currentUser.data.misTokens >= this.formSendToken.get('cantidad').value && this.formSendToken.get('cantidad').value > 0) {
         this.service.enviarToken(this.currentUser.id, this.ofertSelected.data.userId, this.formSendToken.value, this.ofertSelected.id);
         Swal.fire({
           title: "Genial",
@@ -269,20 +291,23 @@ export class ShopComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Vale'
         })
+        this.formSendToken.reset();
       } else {
         Swal.fire({
           title: "Ups",
-          text: 'Solo tienes '+this.currentUser.data.misTokens+' Tokens Disponibles',
+          text: 'Tienes '+this.currentUser.data.misTokens+' Disponibles, ingresa una cantidad y precio mayor que 0',
           icon: 'warning',
           confirmButtonText: 'Esta bien'
-        })      }
+        })
+      }
     } else {
       Swal.fire({
         title: "Ups",
         text: 'Recuerda llenar todos los campos',
         icon: 'warning',
         confirmButtonText: 'Esta bien'
-      })    }
+      })
+    }
   }
 
   //despliega el modal con los datos de la oferta

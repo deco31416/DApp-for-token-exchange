@@ -28,9 +28,18 @@ export class RegisterService {
         this.route.navigate(['/main']);
       }
     ).catch(error => {
+      var mensajeError;
+      if(error.code == 'auth/email-already-in-use'){
+        mensajeError = 'Este email ya esta registrado'
+      }else if(error.code == 'auth/invalid-email'){
+        mensajeError = 'El Email no es valido'
+      }
+      else if(error.code == "auth/weak-password"){
+        mensajeError = 'La contraseña debe tener al menos 6 digitos '
+      }
       Swal.fire({
         title: "Disculpe",
-        text: 'El email o la contraseña no son validos para el registro',
+        text: mensajeError,
         icon: 'warning',
         confirmButtonText: 'continuar'
       })

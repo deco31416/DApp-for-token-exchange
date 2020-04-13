@@ -43,6 +43,9 @@
     margin-bottom: 50px;
 }
 
+.cursor{
+    cursor: pointer;
+}
 #footer{
     position: fixed;
     top: 10px;
